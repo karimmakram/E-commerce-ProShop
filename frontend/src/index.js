@@ -1,17 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-localStorage.getItem('theme') === '2' && import('./bootstrap2.min.css')
-;(localStorage.getItem('theme') === '1' ||
-  localStorage.getItem('theme') === null) &&
-  import('./bootstrap.min.css')
+import store from './store'
+// localStorage.getItem('theme') === '2' && import('./bootstrap2.min.css')
+// ;(localStorage.getItem('theme') === '1' ||
+//   localStorage.getItem('theme') === null) &&
+import './bootstrap.min.css'
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 )
 
