@@ -1,19 +1,23 @@
 import express from 'express'
-import products from './data/products'
 import cors from 'cors'
+import dotenv from 'dotenv'
+import { connectDb } from './config/db'
+import productRoute from './src/products/product.route'
+import { errorHandler, notFound } from './middlewere/handleError'
+
+dotenv.config()
+connectDb()
 const app = express()
 app.use(cors())
-app.get('/', (req, res) => {
+app.use(express.json())
+app.use('/api/products', productRoute)
+app.use(errorHandler)
+app.use(notFound)
+app.get('/', async (req, res) => {
   res.send('App Running')
 })
-app.get('/api/products', (req, res) => {
-  res.json(products)
-})
-app.get('/api/products/:id', (req, res) => {
-  const product = products.find(p => p._id === req.params.id)
-  if (product) return res.json(product)
-  res.status(400).send('product not found')
-})
-app.listen(5000, () => {
-  console.log('app Running')
+
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+  console.log(`app Running in port ${PORT}`)
 })
