@@ -17,12 +17,16 @@ export const productReducer = (state = intialState, action) => {
     case PRODUCTS_REQUST:
       return { ...state, loading: true }
     case PRODUCTS_LIST_SUCCESS:
-      return { ...state, loading: false, products: payload }
+      return { ...state, loading: false, products: payload, error: null }
     case PRODUCTS_LIST_FAIL:
     case GET_PRODUCT_FAIL:
-      return { ...state, loading: false, products: [], error: payload,product:{} }
+      return {
+        ...state,
+        loading: false,
+        error: payload
+      }
     case GET_PRODUCT_SUCCESS:
-      return { ...state, loading: false, product: payload }
+      return { ...state, loading: false, product: payload, error: null }
     default:
       return state
   }
