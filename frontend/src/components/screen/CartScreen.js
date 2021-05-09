@@ -12,7 +12,7 @@ const CartScreen = ({ match, location, history }) => {
   const { cartItems } = cart
   useEffect(() => {
     if (productId) dispatch(addItem(productId, qty))
-  }, [dispatch, match, qty])
+  }, [dispatch, productId, qty])
 
   const handleChckout = () => {
     history.push(`/login?redirect=shipping`)

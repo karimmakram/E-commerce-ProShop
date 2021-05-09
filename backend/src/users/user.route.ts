@@ -15,7 +15,16 @@ userRoute.post('/', asyncHandler(userCn.registerUser))
 userRoute.post('/login', asyncHandler(userCn.Login))
 
 // @Desc    profile user
-// @route   post /api/users/login
+// @route   get /api/users/profile
 // @access  private
-userRoute.get('/profile', asyncHandler(Auth), asyncHandler(userCn.userProfile))
+userRoute
+  .route('/profile')
+  .get(asyncHandler(Auth), asyncHandler(userCn.userProfile))
+
+// @Desc    update user profile
+// @route   put /api/users/profile
+// @access  private
+userRoute
+  .route('/profile')
+  .put(asyncHandler(Auth), asyncHandler(userCn.updateProfile))
 export default userRoute

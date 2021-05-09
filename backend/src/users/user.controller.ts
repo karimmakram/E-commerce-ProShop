@@ -21,9 +21,13 @@ class userController {
         isAdmin
       })
       await newUser.save()
-      return res
-        .status(200)
-        .json({ user: newUser, token: newUser.generateToken() })
+      return res.status(200).json({
+        _id: newUser.id,
+        name: newUser.name,
+        email: req.user.email,
+        isAdmin: newUser.isAdmin,
+        token: newUser.generateToken()
+      })
     } catch (error) {
       throw new Error(error.message)
     }
@@ -32,10 +36,11 @@ class userController {
   Login = async (req: Request, res: Response) => {
     const { email, password }: { email: string; password: string } = req.body
     const user = await userModel.findOne({ email })
-    if (user && user.comparePassword(password)) {
+    if (user && (await user.comparePassword(password))) {
       return res.send({
         _id: user.id,
         name: user.name,
+        email: user.email,
         isAdmin: user.isAdmin,
         token: user.generateToken()
       })
@@ -44,7 +49,33 @@ class userController {
   }
 
   userProfile = async (req: Request, res: Response) => {
-    res.status(200).json({ user: req.user })
+    res.status(200).json({
+      _id: req.user._id,
+      email: req.user.email,
+      name: req.user.name,
+      isAdmin: req.user.isAdmin
+    })
+  }
+  updateProfile = async (req: Request, res: Response) => {
+    const user = await userModel.findById(req.user._id)
+    try {
+      if (user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        if (req.body.password) user.password = req.body.password
+        const updatedUser = await user.save()
+        res.status(200).json({
+          _id: updatedUser._id,
+          email: updatedUser.email,
+          name: updatedUser.name,
+          isAdmin: updatedUser.isAdmin
+        })
+      } else {
+        throw new Error('user Not Found')
+      }
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 }
 

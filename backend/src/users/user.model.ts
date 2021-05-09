@@ -20,8 +20,7 @@ export class User extends Typegoose {
 
   @instanceMethod
   async comparePassword(this: InstanceType<User>, password: string) {
-    // return await bcrypt.compare(password, `${this.password}`)
-    return password === this.password
+    return await bcrypt.compare(password, `${this.password}`)
   }
 
   @instanceMethod
