@@ -10,6 +10,8 @@ export const GET_PRODUCT_FAIL = 'GET_PRODUCT_FAIL'
 
 export const CART_ADD_ITEM = 'CART_ADD_ITEM'
 export const CART_REMVOE_ITEM = 'CART_REMVOE_ITEM'
+export const CART_SAVE_SHIPPING_ADDRESS = 'CART_SAVE_SHIPPING_ADDRESS'
+export const CART_SAVE_PAYMENT_METHOD = 'CART_SAVE_PAYMENT_METHOD'
 
 //// user
 ////-------------------login---------------/
