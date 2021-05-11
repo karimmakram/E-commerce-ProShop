@@ -5,6 +5,7 @@ import { connectDb } from './config/db'
 import productRoute from './src/products/product.route'
 import userRoute from './src/users/user.route'
 import { errorHandler, notFound } from './middlewere/handleError'
+import orderRoute from './src/order/order.route'
 
 dotenv.config()
 connectDb()
@@ -13,6 +14,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api/products', productRoute)
 app.use('/api/users', userRoute)
+app.use('/api/orders', orderRoute)
 app.use(errorHandler)
 app.use(notFound)
 app.get('/', async (req, res) => {

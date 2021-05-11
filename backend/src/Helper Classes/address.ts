@@ -7,7 +7,7 @@ export class Address extends Typegoose {
   city?: string
   @prop({ required: true })
   postalCode?: string
-  @prop({ required: true })
-  country?: string
+  // @prop({ required: true })
+  // country?: string
 }
 export const addressModel = new Address().getModelForClass(Address)

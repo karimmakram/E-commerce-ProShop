@@ -20,6 +20,8 @@ export class Order extends Typegoose {
   @prop({ required: true, default: 0.0 })
   shippingPrice?: number
   @prop({ required: true, default: 0.0 })
+  itemsPrice?: number
+  @prop({ required: true, default: 0.0 })
   totalPrice?: number
   @prop({ required: true, default: false })
   isPaid?: boolean
