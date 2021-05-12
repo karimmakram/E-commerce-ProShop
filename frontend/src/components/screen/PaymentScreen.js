@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../FormContiner'
@@ -11,7 +11,14 @@ const ShippingScreen = ({ history }) => {
   }
   const [paymentMethod, setPaymentMethod] = useState('PayPal')
   const dispatch = useDispatch()
+  const { userInfo } = useSelector(state => state.user)
 
+  ///////////////fnction
+  useEffect(() => {
+    if (!userInfo) {
+      history.push('/login')
+    }
+  }, [history, userInfo])
   const submitHandler = e => {
     e.preventDefault()
     dispatch(savePaymentMethod(paymentMethod))
@@ -44,7 +51,7 @@ const ShippingScreen = ({ history }) => {
             ></Form.Check>
           </Col>
         </Form.Group>
-        <Button type='submit' variant='primary' autoCapitalize={false}>
+        <Button type='submit' variant='primary'>
           Next
         </Button>
       </Form>

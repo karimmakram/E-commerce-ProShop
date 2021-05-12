@@ -24,7 +24,7 @@ class userController {
       return res.status(200).json({
         _id: newUser.id,
         name: newUser.name,
-        email: req.user.email,
+        email: newUser.email,
         isAdmin: newUser.isAdmin,
         token: newUser.generateToken()
       })

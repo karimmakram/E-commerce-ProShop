@@ -31,6 +31,8 @@ export class Order extends Typegoose {
   isDelivered?: boolean
   @prop({})
   deliveredAt?: Date
+  @prop({ required: true, default: Date.now() })
+  createdAt?: Date
 }
 const orderModel = new Order().getModelForClass(Order)
 export default orderModel

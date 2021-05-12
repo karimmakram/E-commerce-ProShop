@@ -8,7 +8,11 @@ import {
   USER_REGISTER_SUCCESS,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE,
-  USER_UPDATE_PROFILE_FAIL
+  USER_UPDATE_PROFILE_FAIL,
+  MY_ORDER_LIST_REST,
+  ORDER_DETAILS_REQUEST,
+  ORDER_DETAILS_RESET,
+  ORDER_PAY_RESET
 } from '../types'
 import { config, authConfig } from '../config'
 import axios from 'axios'
@@ -59,4 +63,7 @@ export const updateProfile = (updatedData, token) => async dispatch => {
 export const logout = () => dispatch => {
   localStorage.removeItem('userInfo')
   dispatch({ type: USER_LOGOUT })
+  dispatch({ type: MY_ORDER_LIST_REST })
+  dispatch({ type: ORDER_DETAILS_RESET })
+  dispatch({ type: ORDER_PAY_RESET })
 }

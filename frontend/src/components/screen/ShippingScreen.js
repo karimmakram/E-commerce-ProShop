@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../FormContiner'
@@ -10,7 +10,14 @@ const ShippingScreen = ({ history }) => {
   const [city, setCity] = useState(shippingAddress.city)
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
   const dispatch = useDispatch()
+  const { userInfo } = useSelector(state => state.user)
 
+  ///////////////fnction
+  useEffect(() => {
+    if (!userInfo) {
+      history.push('/login')
+    }
+  }, [history, userInfo])
   const submitHandler = e => {
     e.preventDefault()
     dispatch(saveShippingAddress({ address, city, postalCode }))

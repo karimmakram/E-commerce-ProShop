@@ -1,21 +1,62 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Row, Button, ListGroup, Image, Card } from 'react-bootstrap'
+import { Col, Row, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Loader from '../Loader'
 import Message from '../Message'
-import { getOrderById } from '../../redux/actions/orderAction'
-const OrderScreen = ({ match }) => {
+import { getOrderById, payOrder } from '../../redux/actions/orderAction'
+// const PayPalButton = paypal.Buttons.driver('react', { React, ReactDOM })
+import { PayPalButton } from 'react-paypal-button-v2'
+const OrderScreen = ({ match, history }) => {
+  const [sdkReady, setSdkReady] = useState(true)
+  const [errorPayment, setErrorPayment] = useState(null)
   const orderId = match.params.id
   const dispatch = useDispatch()
-
   const { loading, error, order } = useSelector(state => state.orderDetails)
+  const { userInfo } = useSelector(state => state.user)
+  const {
+    loading: loadingPay,
+    error: payError,
+    success: successPay
+  } = useSelector(state => state.orderPay)
   useEffect(() => {
-    dispatch(getOrderById(orderId))
-  }, [orderId])
+    if (!userInfo) {
+      history.push('/login')
+    }
+    // const addPaypalScript = async () => {
+    //   const { data: clientId } = await axios.get('/api/config/paypal')
+    //   const script = document.createElement('script')
+    //   script.type = 'text/javascript'
+    //   script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+    //   script.async = true
+    //   script.onload = () => {
+    //     setSdkReady(true)
 
-  const paymentHandler = () => {
-    console.log('payment')
+    //     const PayPalButton = paypal.Buttons.driver('react', { React, ReactDOM })
+    //   }
+
+    //   document.body.appendChild(script)
+    // }
+    if (!order || successPay || orderId != order._id)
+      dispatch(getOrderById(orderId))
+    // } else if (!order.isPaid) {
+    //   if (!window.paypal) {
+    //     addPaypalScript()
+    //   } else {
+    // const PayPalButton = paypal.Buttons.driver('react', { React, ReactDOM })
+    //     setSdkReady(true)
+    //   }
+    // }
+  }, [dispatch, orderId, successPay, userInfo, history])
+
+  const successPaymentHandler = paymentResult => {
+    console.log(paymentResult)
+    dispatch(payOrder(orderId, { paymentResult }))
+  }
+  const errorPaymentHandler = error => {
+    console.log(error)
+
+    setErrorPayment('Error in Payment')
   }
   return loading ? (
     <Loader />
@@ -56,7 +97,7 @@ const OrderScreen = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant='success'>Paid on {order.piadAt}</Message>
+                <Message variant='success'>Paid on {order.paidAt}</Message>
               ) : (
                 <Message variant='danger'>Not Paid</Message>
               )}
@@ -125,18 +166,31 @@ const OrderScreen = ({ match }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  onClick={paymentHandler}
-                >
-                  Payment
-                </Button>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                {error && <Message variant='danger'>{error}</Message>}
-              </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount='0.01'
+                      onSuccess={successPaymentHandler}
+                      catchError={errorPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
+
+              {errorPayment && (
+                <ListGroup.Item>
+                  <Message variant='danger'>{errorPayment}</Message>
+                </ListGroup.Item>
+              )}
+              {error && (
+                <ListGroup.Item>
+                  <Message variant='danger'>{error}</Message>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

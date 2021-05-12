@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Col, Row, Button, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import { Form, Col, Row, Button, Table } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import Message from '../Message'
 import Loader from '../Loader'
 import { updateProfile } from '../../redux/actions/userAction'
+import { getMyOrderList } from '../../redux/actions/orderAction'
 const ProfileScreen = ({ history }) => {
   const { userInfo, loading, error, success } = useSelector(state => state.user)
+  const { loading: ordersLoading, orders, error: errorOrders } = useSelector(
+    state => state.myOrderList
+  )
   const dispatch = useDispatch()
   const [name, setName] = useState('')
   const [email, setemail] = useState('')
@@ -18,8 +23,9 @@ const ProfileScreen = ({ history }) => {
     } else {
       setName(userInfo.name)
       setemail(userInfo.email)
+      dispatch(getMyOrderList())
     }
-  }, [history, userInfo, success])
+  }, [dispatch, history, userInfo, success])
   const submitForm = e => {
     setMessage(null)
     e.preventDefault()
@@ -29,7 +35,7 @@ const ProfileScreen = ({ history }) => {
   }
   return (
     <Row>
-      <Col md={4}>
+      <Col md={3}>
         <h2>Profile </h2>
         {error && <Message variant='danger'>{error}</Message>}
         {message && <Message variant='danger'>{message}</Message>}
@@ -87,9 +93,58 @@ const ProfileScreen = ({ history }) => {
           </Button>
         </Form>
       </Col>
-      <Col md={8}>
+      <Col md={9}>
         <h2>My Orders</h2>
-        <h4>you don't order anything till Now</h4>
+        {ordersLoading ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant='danger'>{errorOrders}</Message>
+        ) : orders.length === 0 ? (
+          <Message>you don't have any orders</Message>
+        ) : (
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Delivered</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map(order => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/orders/${order._id}`}>
+                      <Button className='btn-sm' type='button' variant='light'>
+                        Details
+                      </Button>
+                    </LinkContainer>{' '}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   )

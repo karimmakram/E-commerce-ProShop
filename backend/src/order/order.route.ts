@@ -4,18 +4,32 @@ const orderRoute = Router()
 import asyncHandler from 'express-async-handler'
 import Auth from '../../middlewere/auth'
 
-///@desc add order item
-///@route /api/orders
-///@access private
+///@desc    add order
+///@route   POST /api/orders
+///@access  private
 orderRoute
   .route('/')
   .post(asyncHandler(Auth), asyncHandler(orderController.addOrder))
 
-///@desc add order item
-///@route /api/orders
-///@access private
+///@desc    get user orders
+///@route   GET  /api/orders
+///@access  private
+orderRoute
+  .route('/me')
+  .get(asyncHandler(Auth), asyncHandler(orderController.getUserOrders))
+
+///@desc     get order by ID
+///@route    GET /api/orders/:id
+///@access   private
 orderRoute
   .route('/:id')
   .get(asyncHandler(Auth), asyncHandler(orderController.getOrder))
+
+///@desc   paid order with paypal
+///@route  PUT /api/orders/orderId/pay
+///@access private
+orderRoute
+  .route('/:id/pay')
+  .put(asyncHandler(Auth), asyncHandler(orderController.paidOrder))
 
 export default orderRoute
