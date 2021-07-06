@@ -8,7 +8,11 @@ import {
   USER_REGISTER_SUCCESS,
   USER_UPDATE_PROFILE,
   USER_UPDATE_PROFILE_SUCCESS,
-  USER_UPDATE_PROFILE_FAIL
+  USER_UPDATE_PROFILE_FAIL,
+  USER_LIST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
+  USER_LIST_RESET
 } from '../types'
 const intialState = {
   userInfo: null,
@@ -33,6 +37,21 @@ const userReducer = (state = intialState, action) => {
       return { ...state, error: payload, loading: false, success: false }
     case USER_LOGOUT:
       return { userInfo: null, loading: false }
+    default:
+      return state
+  }
+}
+export const userListReducer = (state = { users: [] }, action) => {
+  const { type, payload } = action
+  switch (type) {
+    case USER_LIST:
+      return { loading: true }
+    case USER_LIST_SUCCESS:
+      return { loading: false, users: payload }
+    case USER_LIST_FAIL:
+      return { error: payload, loading: false }
+    case USER_LIST_RESET:
+      return { users: [] }
     default:
       return state
   }

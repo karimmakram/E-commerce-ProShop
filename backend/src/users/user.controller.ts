@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import userModel from './user.model'
-import bcrypt from 'bcryptjs'
 class userController {
   registerUser = async (req: Request, res: Response) => {
     const {
@@ -76,6 +75,11 @@ class userController {
     } catch (error) {
       throw new Error(error.message)
     }
+  }
+
+  getAllUsers = async (req: Request, res: Response) => {
+    const users = await userModel.find({})
+    res.json(users)
   }
 }
 

@@ -30,6 +30,12 @@ export const USER_UPDATE_PROFILE = 'USER_UPDATE_PROFILE'
 export const USER_UPDATE_PROFILE_SUCCESS = 'USER_UPDATE_PROFILE_SUCCESS'
 export const USER_UPDATE_PROFILE_FAIL = 'USER_UPDATE_PROFILE_FAIL'
 
+///// ------------------userList---------------------/
+export const USER_LIST = 'USER_LIST'
+export const USER_LIST_SUCCESS = 'USER_LIST_SUCCESS'
+export const USER_LIST_FAIL = 'USER_LIST_FAIL'
+export const USER_LIST_RESET = 'USER_LIST_RESET'
+
 ///// -----------------Order -----------------/
 export const ORDER_REQUEST = 'ORDER_REQUEST'
 export const ORDER_CREATE_SUCCESS = 'ORDER_CREATE_SUCCESS'

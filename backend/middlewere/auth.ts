@@ -25,4 +25,9 @@ const Auth = async (req: Request, res: Response, next: NextFunction) => {
     throw new Error(`tokne is not valid`)
   }
 }
+
+export const Admin = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user && req.user.isAdmin) next()
+  else throw new Error('Authorization fail')
+}
 export default Auth

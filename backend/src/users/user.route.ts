@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import asyncHandler from 'express-async-handler'
 import userCn from './user.controller'
-import Auth from '../../middlewere/auth'
+import Auth, { Admin } from '../../middlewere/auth'
 const userRoute = Router()
 
 // @Desc    register user
@@ -27,4 +27,14 @@ userRoute
 userRoute
   .route('/profile')
   .put(asyncHandler(Auth), asyncHandler(userCn.updateProfile))
+
+// @Desc    get users
+// @route   post /api/users
+// @access  private (Admin)
+userRoute.get(
+  '/',
+  asyncHandler(Auth),
+  asyncHandler(Admin),
+  asyncHandler(userCn.getAllUsers)
+)
 export default userRoute

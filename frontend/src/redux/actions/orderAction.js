@@ -44,11 +44,7 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
   const token = getState().user.userInfo.token
   const config = authConfig(token)
   try {
-    const { data } = await axios.put(
-      `/api/orders/${id}/pay`,
-      paymentResult,
-      config
-    )
+    await axios.put(`/api/orders/${id}/pay`, paymentResult, config)
     dispatch({ type: ORDER_PAY_SUCCESS })
   } catch (error) {
     HandelError(dispatch, ORDER_PAY_FAIL, error)

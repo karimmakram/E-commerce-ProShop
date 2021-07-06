@@ -6,6 +6,9 @@ import { logout } from '../redux/actions/userAction'
 const Header = () => {
   const { userInfo } = useSelector(state => state.user)
   const dispatch = useDispatch()
+  const handlerLogout = () => {
+    dispatch(logout())
+  }
   return (
     <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
       <Container>
@@ -27,9 +30,11 @@ const Header = () => {
                 <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>
                 </LinkContainer>
-                <NavDropdown.Item onClick={e => dispatch(logout())}>
-                  Logout
-                </NavDropdown.Item>
+                <LinkContainer to='/'>
+                  <NavDropdown.Item onClick={handlerLogout}>
+                    Logout
+                  </NavDropdown.Item>
+                </LinkContainer>
               </NavDropdown>
             ) : (
               <LinkContainer to='/login'>
@@ -37,6 +42,19 @@ const Header = () => {
                   <i className='fas fa-user'></i>Sign in
                 </Nav.Link>
               </LinkContainer>
+            )}
+            {userInfo && userInfo.isAdmin && (
+              <NavDropdown title='Admin' id='admin'>
+                <LinkContainer to='/admin/userlist'>
+                  <NavDropdown.Item>Users</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to='/admin/productlist'>
+                  <NavDropdown.Item>Products</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to='/admin/orderlist'>
+                  <NavDropdown.Item>Orders</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
             )}
           </Nav>
         </Navbar.Collapse>

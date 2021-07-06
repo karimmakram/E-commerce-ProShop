@@ -37,7 +37,7 @@ const OrderScreen = ({ match, history }) => {
 
     //   document.body.appendChild(script)
     // }
-    if (!order || successPay || orderId != order._id)
+    if (!order || successPay || orderId !== order._id)
       dispatch(getOrderById(orderId))
     // } else if (!order.isPaid) {
     //   if (!window.paypal) {
@@ -47,7 +47,7 @@ const OrderScreen = ({ match, history }) => {
     //     setSdkReady(true)
     //   }
     // }
-  }, [dispatch, orderId, successPay, userInfo, history])
+  }, [dispatch, orderId, successPay, userInfo, history, order])
 
   const successPaymentHandler = paymentResult => {
     console.log(paymentResult)
