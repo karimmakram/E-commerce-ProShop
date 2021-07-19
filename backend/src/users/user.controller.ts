@@ -81,6 +81,17 @@ class userController {
     const users = await userModel.find({})
     res.json(users)
   }
+
+  deleteUserById = async (req: Request, res: Response) => {
+    const id: string = req.params.id
+    try {
+      const user = await userModel.findByIdAndDelete(id)
+      if (user) return res.status(200).json({ message: 'user removed' })
+      throw new Error(`user not Found`)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
 
 export default new userController()

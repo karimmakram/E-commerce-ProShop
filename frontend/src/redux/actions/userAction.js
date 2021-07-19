@@ -15,7 +15,10 @@ import {
   USER_LIST,
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
-  USER_LIST_RESET
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL
 } from '../types'
 import { config, authConfig } from '../config'
 import axios from 'axios'
@@ -63,17 +66,27 @@ export const updateProfile = (updatedData, token) => async dispatch => {
   }
 }
 
-export const userList = () => async dispatch => {
+export const userList = token => async dispatch => {
   dispatch({ type: USER_LIST })
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-  let token = ''
-  if (userInfo) token = userInfo.token
   const config = authConfig(token)
+  console.log(token)
+
   try {
     const { data } = await axios.get('/api/users', config)
     dispatch({ type: USER_LIST_SUCCESS, payload: data })
   } catch (error) {
     HandelError(dispatch, USER_LIST_FAIL, error)
+  }
+}
+
+export const deleteUser = (id, token) => async dispatch => {
+  dispatch({ type: USER_DELETE_REQUEST })
+  const config = authConfig(token)
+  try {
+    const { data } = await axios.delete(`/api/users/${id}`, config)
+    dispatch({ type: USER_DELETE_SUCCESS })
+  } catch (error) {
+    HandelError(dispatch, USER_DELETE_FAIL, error)
   }
 }
 

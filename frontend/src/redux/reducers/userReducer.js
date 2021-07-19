@@ -12,7 +12,10 @@ import {
   USER_LIST,
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
-  USER_LIST_RESET
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_FAIL,
+  USER_DELETE_SUCCESS
 } from '../types'
 const intialState = {
   userInfo: null,
@@ -52,6 +55,19 @@ export const userListReducer = (state = { users: [] }, action) => {
       return { error: payload, loading: false }
     case USER_LIST_RESET:
       return { users: [] }
+    default:
+      return state
+  }
+}
+export const userDeleteReducer = (state = {}, action) => {
+  const { type, payload } = action
+  switch (type) {
+    case USER_DELETE_REQUEST:
+      return { loading: true }
+    case USER_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case USER_DELETE_FAIL:
+      return { error: payload, loading: false }
     default:
       return state
   }

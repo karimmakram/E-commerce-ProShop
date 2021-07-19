@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { userList } from '../../redux/actions/userAction'
+import { userList, deleteUser } from '../../redux/actions/userAction'
 import { Button, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../Message'
@@ -9,14 +9,16 @@ const UserListScreen = ({ history }) => {
   const dispatch = useDispatch()
   const user_list = useSelector(state => state.userList)
   const { userInfo } = useSelector(state => state.user)
+  const { success } = useSelector(state => state.userDelete)
   const { loading, error, users } = user_list
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) dispatch(userList())
+    if (userInfo && userInfo.isAdmin) dispatch(userList(userInfo.token))
     else history.push('/')
-  }, [dispatch, history])
+  }, [dispatch, history, success])
 
-  const deleteUser = _id => {
-    console.log(_id)
+  const deleteUserHandler = _id => {
+    if (window.confirm('Are you sure ?'))
+      dispatch(deleteUser(_id, userInfo.token))
   }
   return (
     <>
@@ -65,7 +67,7 @@ const UserListScreen = ({ history }) => {
                       variant='danger'
                       className='btn-sm'
                       onClick={() => {
-                        deleteUser(user._id)
+                        deleteUserHandler(user._id)
                       }}
                     >
                       <i className='fas fa-trash'></i>

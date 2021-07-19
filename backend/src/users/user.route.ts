@@ -37,4 +37,14 @@ userRoute.get(
   asyncHandler(Admin),
   asyncHandler(userCn.getAllUsers)
 )
+
+// @Desc    delete user
+// @route   post /api/users
+// @access  private (Admin)
+userRoute.delete(
+  '/:id',
+  asyncHandler(Auth),
+  asyncHandler(Admin),
+  asyncHandler(userCn.deleteUserById)
+)
 export default userRoute
