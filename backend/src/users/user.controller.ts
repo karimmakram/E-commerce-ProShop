@@ -78,7 +78,7 @@ class userController {
   }
 
   getAllUsers = async (req: Request, res: Response) => {
-    const users = await userModel.find({})
+    const users = await userModel.find({}).select('-password')
     res.json(users)
   }
 
@@ -88,6 +88,39 @@ class userController {
       const user = await userModel.findByIdAndDelete(id)
       if (user) return res.status(200).json({ message: 'user removed' })
       throw new Error(`user not Found`)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  getUserById = async (req: Request, res: Response) => {
+    const id: string = req.params.id
+    try {
+      const user = await userModel.findById(id).select('-password')
+      if (user) return res.status(200).json(user)
+      res.status(404)
+      throw new Error(`user not Found`)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+  updateUser = async (req: Request, res: Response) => {
+    const user = await userModel.findById(req.params.id)
+    try {
+      if (user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        user.isAdmin = req.body.isAdmin
+        const updatedUser = await user.save()
+        res.status(200).json({
+          _id: updatedUser._id,
+          email: updatedUser.email,
+          name: updatedUser.name,
+          isAdmin: updatedUser.isAdmin
+        })
+      } else {
+        throw new Error('user Not Found')
+      }
     } catch (error) {
       throw new Error(error.message)
     }

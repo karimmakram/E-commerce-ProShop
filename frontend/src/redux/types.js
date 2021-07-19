@@ -36,6 +36,17 @@ export const USER_LIST_SUCCESS = 'USER_LIST_SUCCESS'
 export const USER_LIST_FAIL = 'USER_LIST_FAIL'
 export const USER_LIST_RESET = 'USER_LIST_RESET'
 
+///// ------------------Detils user ---------------------/
+export const USER_DETILS_REQUEST = 'USER_DETILS_REQUEST'
+export const USER_DETILS_SUCCESS = 'USER_DETILS_SUCCESS'
+export const USER_DETILS_FAIL = 'USER_DETILS_FAIL'
+
+///// ------------------update user---------------------/
+export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST'
+export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS'
+export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL'
+export const USER_UPDATE_RESET = 'USER_UPDATE_RESET'
+
 ///// ------------------delete user ---------------------/
 export const USER_DELETE_REQUEST = 'USER_DELETE_REQUEST'
 export const USER_DELETE_SUCCESS = 'USER_DELETE_SUCCESS'

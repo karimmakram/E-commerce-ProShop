@@ -18,7 +18,13 @@ import {
   USER_LIST_RESET,
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
-  USER_DELETE_FAIL
+  USER_DELETE_FAIL,
+  USER_DETILS_REQUEST,
+  USER_DETILS_SUCCESS,
+  USER_DETILS_FAIL,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL
 } from '../types'
 import { config, authConfig } from '../config'
 import axios from 'axios'
@@ -83,13 +89,35 @@ export const deleteUser = (id, token) => async dispatch => {
   dispatch({ type: USER_DELETE_REQUEST })
   const config = authConfig(token)
   try {
-    const { data } = await axios.delete(`/api/users/${id}`, config)
+    await axios.delete(`/api/users/${id}`, config)
     dispatch({ type: USER_DELETE_SUCCESS })
   } catch (error) {
     HandelError(dispatch, USER_DELETE_FAIL, error)
   }
 }
 
+export const updateUser = (user, token) => async dispatch => {
+  dispatch({ type: USER_UPDATE_REQUEST })
+  const config = authConfig(token)
+  try {
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+    dispatch({ type: USER_UPDATE_SUCCESS })
+    dispatch({ type: USER_DETILS_SUCCESS, payload: data })
+  } catch (error) {
+    HandelError(dispatch, USER_UPDATE_FAIL, error)
+  }
+}
+
+export const getUserDetils = (id, token) => async dispatch => {
+  dispatch({ type: USER_DETILS_REQUEST })
+  const config = authConfig(token)
+  try {
+    const { data } = await axios.get(`/api/users/${id}`, config)
+    dispatch({ type: USER_DETILS_SUCCESS, payload: data })
+  } catch (error) {
+    HandelError(dispatch, USER_DETILS_FAIL, error)
+  }
+}
 export const logout = () => dispatch => {
   localStorage.removeItem('userInfo')
   dispatch({ type: USER_LOGOUT })

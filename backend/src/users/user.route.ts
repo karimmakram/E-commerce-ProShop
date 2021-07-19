@@ -28,6 +28,8 @@ userRoute
   .route('/profile')
   .put(asyncHandler(Auth), asyncHandler(userCn.updateProfile))
 
+///////////////////////////////////Admin /////////////////////////////////////////
+
 // @Desc    get users
 // @route   post /api/users
 // @access  private (Admin)
@@ -38,6 +40,16 @@ userRoute.get(
   asyncHandler(userCn.getAllUsers)
 )
 
+// @Desc    get user by id
+// @route   post /api/users/:id
+// @access  private (Admin)
+userRoute.get(
+  '/:id',
+  asyncHandler(Auth),
+  asyncHandler(Admin),
+  asyncHandler(userCn.getUserById)
+)
+
 // @Desc    delete user
 // @route   post /api/users
 // @access  private (Admin)
@@ -46,5 +58,15 @@ userRoute.delete(
   asyncHandler(Auth),
   asyncHandler(Admin),
   asyncHandler(userCn.deleteUserById)
+)
+
+// @Desc update user
+// @route   put /api/users/:id
+// @access private (Admin)
+userRoute.put(
+  '/:id',
+  asyncHandler(Auth),
+  asyncHandler(Admin),
+  asyncHandler(userCn.updateUser)
 )
 export default userRoute
