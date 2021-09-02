@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react'
 // import { LinkContainer } from 'react-router-bootstrap'
-import { getProducts, deleteProduct } from '../../redux/actions/productActions'
+import {
+  getProducts,
+  deleteProduct,
+  createProduct,
+  updateProduct
+} from '../../redux/actions/productActions'
 import { Button, Table, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../Message'
 import Loader from '../Loader'
 import ModelFrom from './ModelFrom'
+import { PRODUCT_CREATE_RESET } from '../../redux/types'
+
 const ProductScreen = ({ history, match }) => {
   const dispatch = useDispatch()
   const user_list = useSelector(state => state.productState)
@@ -16,11 +23,22 @@ const ProductScreen = ({ history, match }) => {
   const { success, error: errorDelete, loading: loadingDelete } = useSelector(
     state => state.productDelete
   )
+  const {
+    success: successCreate,
+    loading: loadingCreate,
+    error: errorCreate
+  } = useSelector(state => state.productCreate)
   const { loading, error, products } = user_list
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) dispatch(getProducts())
-    else history.push('/')
-  }, [dispatch, history, userInfo, success])
+    if (successCreate) {
+      setshow(false)
+      setEdit(false)
+      dispatch({ type: PRODUCT_CREATE_RESET })
+    }
+    if (userInfo && userInfo.isAdmin) {
+      if (!successCreate) dispatch(getProducts())
+    } else history.push('/')
+  }, [dispatch, history, userInfo, success, successCreate])
   const createProductHandler = () => {
     setshow(true)
   }
@@ -28,22 +46,43 @@ const ProductScreen = ({ history, match }) => {
     if (window.confirm('Are you sure ?'))
       dispatch(deleteProduct(_id, userInfo.token))
   }
-  const onSubmitModel = event => {
-    event.preventDefault(event)
-    console.log(event.target.name.value)
-    console.log(event.target.email.value)
+  const onSubmitModel = e => {
+    e.preventDefault(e)
+    dispatch(
+      createProduct({
+        name: e.target.name.value,
+        brand: e.target.brand.value,
+        image: e.target.image.value,
+        category: e.target.category.value,
+        price: e.target.price.value,
+        countInStock: e.target.countInStock.value,
+        description: e.target.description.value
+      })
+    )
+  }
+  const onSubmitModelEdit = (e, id, product) => {
+    e.preventDefault()
+    dispatch(updateProduct(id, product))
   }
   return (
     <>
       {show && (
-        <ModelFrom show={show} setshow={setshow} onSubmit={onSubmitModel} />
+        <ModelFrom
+          show={show}
+          setshow={setshow}
+          onSubmit={onSubmitModel}
+          loading={loadingCreate}
+          error={errorCreate}
+        />
       )}
       {edit && (
         <ModelFrom
           show={edit}
           setshow={setEdit}
-          onSubmit={onSubmitModel}
+          onSubmit={onSubmitModelEdit}
           product={product}
+          loading={loadingCreate}
+          error={errorCreate}
         />
       )}
       <Row className='align-items-center'>

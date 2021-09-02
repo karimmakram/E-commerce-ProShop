@@ -3,7 +3,8 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import {
   productReducer,
-  productDeleteReducer
+  productDeleteReducer,
+  productCreateReducer
 } from './redux/reducers/productReducer'
 import { cartReducer } from './redux/reducers/cartReducer'
 import userReducer, {
@@ -44,7 +45,8 @@ const reducer = combineReducers({
   userDelete: userDeleteReducer,
   userUpdate: userUpdateReducer,
   userDetils: userDetils,
-  productDelete: productDeleteReducer
+  productDelete: productDeleteReducer,
+  productCreate: productCreateReducer
 })
 const initalState = {
   cart: { cartItems: cartItemsFromStorge, shippingAddress, paymentMethod },
