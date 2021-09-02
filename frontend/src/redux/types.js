@@ -6,6 +6,11 @@ export const PRODUCTS_LIST_FAIL = 'PRODUCTS_LIST_FAIL'
 export const GET_PRODUCT_SUCCESS = 'GET_PRODUCT_SUCCESS'
 export const GET_PRODUCT_FAIL = 'GET_PRODUCT_FAIL'
 
+///// ------------------delete product ---------------------/
+export const PRODUCT_DELETE_REQUEST = 'PRODUCT_DELETE_REQUEST'
+export const PRODUCT_DELETE_SUCCESS = 'PRODUCT_DELETE_SUCCESS'
+export const PRODUCT_DELETE_FAIL = 'PRODUCT_DELETE_FAIL'
+
 ////Cart
 
 export const CART_ADD_ITEM = 'CART_ADD_ITEM'

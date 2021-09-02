@@ -11,6 +11,74 @@ class productController {
     if (product) return res.json(product)
     res.status(404).json({ message: 'product not found' })
   }
+  deleteProduct = async (req: Request, res: Response) => {
+    try {
+      const id = req.params.id
+      const product = await productModel.findByIdAndDelete(id)
+      if (product) {
+        return res.status(200).json({ message: 'Product removed' })
+      }
+      res.status(400)
+      throw new Error('product not found')
+    } catch (error) {
+      res.status(500)
+      throw new Error(error.message)
+    }
+  }
+
+  createProduct = async (req: Request, res: Response) => {
+    const {
+      name,
+      brand,
+      category,
+      price,
+      countInStock,
+      image,
+      description
+    }: {
+      name: string
+      brand: string
+      category: string
+      price: number
+      countInStock: number
+      image: string
+      description: string
+    } = req.body
+
+    try {
+      const product = new productModel({
+        name,
+        brand,
+        category,
+        price,
+        countInStock,
+        image,
+        description,
+        user: req.user._id
+      })
+      const newProduct = await product.save()
+      res.status(200).json(newProduct)
+    } catch (error) {
+      res.status(401).send({ message: error.message })
+    }
+  }
+  updateProduct = async (req: Request, res: Response) => {
+    try {
+      const product = await productModel.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          ...req.body,
+          updaredAt: Date.now(),
+          user: req.user._id
+        }
+      )
+      if (product) return res.status(200).json({ message: 'product updated' })
+
+      throw new Error('product not found')
+    } catch (error) {
+      res.status(401).send({ message: error.message })
+    }
+  }
 }
 
 export default new productController()
