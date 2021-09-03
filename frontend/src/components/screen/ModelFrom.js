@@ -2,6 +2,7 @@ import Modal from 'react-bootstrap/Modal'
 import React, { useState } from 'react'
 import { Form, Row, Col, Button } from 'react-bootstrap'
 import Loader from '../Loader'
+import axios from 'axios'
 import Message from '../Message'
 const ModelFrom = ({ show, setshow, onSubmit, product, loading, error }) => {
   const [name, setname] = useState(product ? product.name : '')
@@ -15,6 +16,29 @@ const ModelFrom = ({ show, setshow, onSubmit, product, loading, error }) => {
   const [description, setdescription] = useState(
     product ? product.description : ''
   )
+  const [uploading, setuploading] = useState(false)
+  const uploadFile = async e => {
+    const file = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', file)
+    setuploading(true)
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      const { data } = await axios.post(
+        'http://localhost:5000/api/upload',
+        formData,
+        config
+      )
+      setimage(data)
+      setuploading(false)
+    } catch (error) {
+      setuploading(false)
+    }
+  }
   return (
     <>
       <Modal
@@ -132,8 +156,15 @@ const ModelFrom = ({ show, setshow, onSubmit, product, loading, error }) => {
                 onChange={e => {
                   setimage(e.target.value)
                 }}
-                readOnly={product ? product._id && true : false}
+                readOnly
               />
+              <Form.File
+                id='image-file'
+                label='Choose File'
+                custom
+                onChange={uploadFile}
+              ></Form.File>
+              {uploading && <Loader />}
             </Form.Group>
 
             <Form.Group className='mb-3' controlId='description'>
