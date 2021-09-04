@@ -32,9 +32,9 @@ const PlaceOrderScreen = ({ history }) => {
       history.push('/login')
     }
     if (success) {
-      history.push(`/orders/${order._id}`)
+      history.push(`/order/${order._id}`)
     }
-  }, [history, success, userInfo, order._id])
+  }, [history, success, userInfo])
 
   const placeOrderHandler = () => {
     dispatch(

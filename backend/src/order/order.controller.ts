@@ -86,6 +86,15 @@ class orderController {
       throw new Error(error.message)
     }
   }
+
+  getOrders = async (req: Request, res: Response) => {
+    try {
+      const orders = await orderModel.find({}).populate('user', 'id name')
+      res.json(orders)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
 
 export default new orderController()
