@@ -13,7 +13,10 @@ import {
   MY_ORDER_LIST_FAIL,
   ORDER_LIST_REQUEST,
   ORDER_LIST_FAIL,
-  ORDER_LIST_SUCCESS
+  ORDER_LIST_SUCCESS,
+  ORDER_DELIVER_SUCCESS,
+  ORDER_DELIVER_FAIL,
+  ORDER_DELIVER_REQUEST
 } from '../types'
 import axios from 'axios'
 import { HandelError } from '../handelError'
@@ -51,6 +54,17 @@ export const payOrder = (id, paymentResult) => async (dispatch, getState) => {
     dispatch({ type: ORDER_PAY_SUCCESS })
   } catch (error) {
     HandelError(dispatch, ORDER_PAY_FAIL, error)
+  }
+}
+
+export const deliverOrder = (id, token) => async dispatch => {
+  dispatch({ type: ORDER_DELIVER_REQUEST })
+  const config = authConfig(token)
+  try {
+    await axios.put(`/api/orders/${id}/deliver`, {}, config)
+    dispatch({ type: ORDER_DELIVER_SUCCESS })
+  } catch (error) {
+    HandelError(dispatch, ORDER_DELIVER_FAIL, error)
   }
 }
 

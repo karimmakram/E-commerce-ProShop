@@ -43,4 +43,12 @@ orderRoute
   .route('/:id/pay')
   .put(asyncHandler(Auth), asyncHandler(orderController.paidOrder))
 
+orderRoute
+  .route('/:id/deliver')
+  .put(
+    asyncHandler(Auth),
+    asyncHandler(Admin),
+    asyncHandler(orderController.deliveredOrder)
+  )
+
 export default orderRoute

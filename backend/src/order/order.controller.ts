@@ -65,11 +65,27 @@ class orderController {
       if (!order) {
         throw new Error('Order Not Found')
       }
-
       order.isPaid = true
       order.paidAt = new Date(Date.now())
       order.paymentResult = paymentResult
       order.paymentResult.email_address = email_address
+      const updatedOrder = await order.save()
+      res.status(200).json(updatedOrder)
+    } catch (error) {
+      if (error.kind == 'ObjectId') throw new Error('Order Not Found')
+      throw new Error(error.message)
+    }
+  }
+
+  deliveredOrder = async (req: Request, res: Response) => {
+    const id = req.params.id
+    try {
+      const order = await orderModel.findById(id)
+      if (!order) {
+        throw new Error('Order Not Found')
+      }
+      order.isDelivered = true
+      order.deliveredAt = new Date(Date.now())
       const updatedOrder = await order.save()
       res.status(200).json(updatedOrder)
     } catch (error) {

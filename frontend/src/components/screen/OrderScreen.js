@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Row, ListGroup, Image, Card } from 'react-bootstrap'
+import { Col, Row, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Loader from '../Loader'
 import Message from '../Message'
-import { getOrderById, payOrder } from '../../redux/actions/orderAction'
+import {
+  getOrderById,
+  payOrder,
+  deliverOrder
+} from '../../redux/actions/orderAction'
 // const PayPalButton = paypal.Buttons.driver('react', { React, ReactDOM })
 import { PayPalButton } from 'react-paypal-button-v2'
+import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../../redux/types'
 const OrderScreen = ({ match, history }) => {
   const [sdkReady, setSdkReady] = useState(true)
   const [errorPayment, setErrorPayment] = useState(null)
@@ -19,6 +24,11 @@ const OrderScreen = ({ match, history }) => {
     error: payError,
     success: successPay
   } = useSelector(state => state.orderPay)
+  const {
+    loading: loadingDeliver,
+    error: deliverError,
+    success: successDeliver
+  } = useSelector(state => state.orderDeliver)
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
@@ -37,8 +47,11 @@ const OrderScreen = ({ match, history }) => {
 
     //   document.body.appendChild(script)
     // }
-    if (!order || successPay || orderId !== order._id)
+    if (!order || successPay || orderId !== order._id || successDeliver) {
+      dispatch({ type: ORDER_DELIVER_RESET })
+      dispatch({ type: ORDER_PAY_RESET })
       dispatch(getOrderById(orderId))
+    }
     // } else if (!order.isPaid) {
     //   if (!window.paypal) {
     //     addPaypalScript()
@@ -47,7 +60,7 @@ const OrderScreen = ({ match, history }) => {
     //     setSdkReady(true)
     //   }
     // }
-  }, [dispatch, orderId, successPay, userInfo, history, order])
+  }, [dispatch, orderId, successPay, userInfo, history, order, successDeliver])
 
   const successPaymentHandler = paymentResult => {
     console.log(paymentResult)
@@ -57,6 +70,10 @@ const OrderScreen = ({ match, history }) => {
     console.log(error)
 
     setErrorPayment('Error in Payment')
+  }
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order._id, userInfo.token))
   }
   return loading ? (
     <Loader />
@@ -170,7 +187,7 @@ const OrderScreen = ({ match, history }) => {
                       <Col>${order.totalPrice}</Col>
                     </Row>
                   </ListGroup.Item>
-                  {order.user._id == userInfo._id
+                  {order.user._id === userInfo._id
                     ? !order.isPaid && (
                         <ListGroup.Item>
                           {loadingPay && <Loader />}
@@ -187,6 +204,18 @@ const OrderScreen = ({ match, history }) => {
                       )
                     : null}
 
+                  {loadingDeliver && <Loader />}
+                  {userInfo &&
+                    userInfo.isAdmin &&
+                    !order.isDelivered &&
+                    order.isPaid && (
+                      <ListGroup.Item>
+                        <Button className='btn-block' onClick={deliverHandler}>
+                          Deliverd
+                        </Button>
+                      </ListGroup.Item>
+                    )}
+
                   {errorPayment && (
                     <ListGroup.Item>
                       <Message variant='danger'>{errorPayment}</Message>
@@ -195,6 +224,11 @@ const OrderScreen = ({ match, history }) => {
                   {error && (
                     <ListGroup.Item>
                       <Message variant='danger'>{error}</Message>
+                    </ListGroup.Item>
+                  )}
+                  {deliverError && (
+                    <ListGroup.Item>
+                      <Message variant='danger'>{deliverError}</Message>
                     </ListGroup.Item>
                   )}
                 </ListGroup>
