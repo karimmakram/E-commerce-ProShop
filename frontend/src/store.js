@@ -5,7 +5,8 @@ import {
   productReducer,
   productDeleteReducer,
   productCreateReducer,
-  productCreateReviewReducer
+  productCreateReviewReducer,
+  productTopReducer
 } from './redux/reducers/productReducer'
 import { cartReducer } from './redux/reducers/cartReducer'
 import userReducer, {
@@ -52,7 +53,8 @@ const reducer = combineReducers({
   userDetils: userDetils,
   productDelete: productDeleteReducer,
   productCreate: productCreateReducer,
-  productReview: productCreateReviewReducer
+  productReview: productCreateReviewReducer,
+  productTop: productTopReducer
 })
 const initalState = {
   cart: { cartItems: cartItemsFromStorge, shippingAddress, paymentMethod },

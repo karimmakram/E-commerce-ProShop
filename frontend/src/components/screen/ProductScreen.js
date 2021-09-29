@@ -10,6 +10,7 @@ import {
   createReviewProduct
 } from '../../redux/actions/productActions'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../../redux/types'
+import Meta from '../Meta'
 const ProductScreen = ({ match, history }) => {
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
@@ -46,6 +47,7 @@ const ProductScreen = ({ match, history }) => {
   }
   return (
     <>
+      <Meta title={product.name} />
       <Link to='/' className='btn  my-3' style={{ paddingLeft: 0 }}>
         Go Back
       </Link>

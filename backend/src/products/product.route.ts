@@ -5,12 +5,16 @@ import Auth, { Admin } from '../../middlewere/auth'
 const productRoute = Router()
 
 // @Desc    get all products
-// @route   GET /api/product
+// @route   GET /api/products
 // @access  public
 productRoute.get('/', asyncHandler(productCn.getAllProducts))
 
+// get 3 top product
+// public
+productRoute.get('/top', asyncHandler(productCn.getTopProduct))
+
 // @Desc    get one product by id
-// @route   GET /api/product/:id
+// @route   GET /api/products/:id
 // @access  public
 productRoute.get('/:id', asyncHandler(productCn.getProductById))
 
@@ -43,5 +47,5 @@ productRoute.post(
   asyncHandler(Auth),
   asyncHandler(productCn.addReview)
 )
-productRoute.get('/top', asyncHandler(productCn.getTopProduct))
+
 export default productRoute

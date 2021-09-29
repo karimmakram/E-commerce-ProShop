@@ -15,7 +15,10 @@ import {
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
-  PRODUCT_CREATE_REVIEW_FAIL
+  PRODUCT_CREATE_REVIEW_FAIL,
+  TOP_PRODUCT_REQUEST,
+  TOP_PRODUCT_SUCCESS,
+  TOP_PRODUCT_FAIL
 } from '../types'
 import axios from 'axios'
 import { HandelError } from '../handelError'
@@ -33,6 +36,15 @@ export const getProducts = (
     dispatch({ type: PRODUCTS_LIST_SUCCESS, payload: data })
   } catch (error) {
     HandelError(dispatch, PRODUCTS_LIST_FAIL, error)
+  }
+}
+export const getProductTop = () => async dispatch => {
+  dispatch({ type: TOP_PRODUCT_REQUEST })
+  try {
+    const { data } = await axios.get(`/api/products/top`)
+    dispatch({ type: TOP_PRODUCT_SUCCESS, payload: data })
+  } catch (error) {
+    HandelError(dispatch, TOP_PRODUCT_FAIL, error)
   }
 }
 export const getProductById = id => async dispatch => {

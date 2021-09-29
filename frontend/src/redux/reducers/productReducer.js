@@ -18,7 +18,10 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
-  PRODUCT_CREATE_REVIEW_RESET
+  PRODUCT_CREATE_REVIEW_RESET,
+  TOP_PRODUCT_REQUEST,
+  TOP_PRODUCT_FAIL,
+  TOP_PRODUCT_SUCCESS
 } from '../types'
 const intialState = {
   products: [],
@@ -98,6 +101,20 @@ export const productCreateReviewReducer = (state = {}, action) => {
       return { loading: false, error: payload }
     case PRODUCT_CREATE_REVIEW_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const productTopReducer = (state = {}, action) => {
+  const { type, payload } = action
+  switch (type) {
+    case TOP_PRODUCT_REQUEST:
+      return { loading: true, products: [] }
+    case TOP_PRODUCT_SUCCESS:
+      return { loading: false, products: payload }
+    case TOP_PRODUCT_FAIL:
+      return { loading: false, error: payload }
     default:
       return state
   }

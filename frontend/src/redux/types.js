@@ -11,6 +11,11 @@ export const PRODUCT_DELETE_REQUEST = 'PRODUCT_DELETE_REQUEST'
 export const PRODUCT_DELETE_SUCCESS = 'PRODUCT_DELETE_SUCCESS'
 export const PRODUCT_DELETE_FAIL = 'PRODUCT_DELETE_FAIL'
 
+///// ------------------top product ---------------------/
+export const TOP_PRODUCT_REQUEST = 'TOP_PRODUCT_REQUEST'
+export const TOP_PRODUCT_SUCCESS = 'TOP_PRODUCT_SUCCESS'
+export const TOP_PRODUCT_FAIL = 'TOP_PRODUCT_FAIL'
+
 ///// ------------------create product ---------------------/
 export const PRODUCT_CREATE_REQUEST = 'PRODUCT_CREATE_REQUEST'
 export const PRODUCT_CREATE_SUCCESS = 'PRODUCT_CREATE_SUCCESS'

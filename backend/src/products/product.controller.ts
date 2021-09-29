@@ -35,6 +35,7 @@ class productController {
     if (products) return res.json(products)
     res.status(404).json({ message: 'product not found' })
   }
+
   deleteProduct = async (req: Request, res: Response) => {
     try {
       const id = req.params.id

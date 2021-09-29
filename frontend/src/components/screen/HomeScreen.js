@@ -6,6 +6,10 @@ import { getProducts } from '../../redux/actions/productActions'
 import Loader from '../Loader'
 import Message from '../Message'
 import Paginate from '../Paginate'
+import ProductCarousel from '../ProductCarousel'
+import Meta from '../Meta'
+import { Link } from 'react-router-dom'
+
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
   const pageNumber = match.params.pageNumber || 1
@@ -18,6 +22,14 @@ const HomeScreen = ({ match }) => {
   }, [dispatch, keyword, pageNumber])
   return (
     <>
+      <Meta />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to='/' className='btn btn-light'>
+          go Back
+        </Link>
+      )}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />
