@@ -4,7 +4,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import {
   productReducer,
   productDeleteReducer,
-  productCreateReducer
+  productCreateReducer,
+  productCreateReviewReducer
 } from './redux/reducers/productReducer'
 import { cartReducer } from './redux/reducers/cartReducer'
 import userReducer, {
@@ -50,7 +51,8 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   userDetils: userDetils,
   productDelete: productDeleteReducer,
-  productCreate: productCreateReducer
+  productCreate: productCreateReducer,
+  productReview: productCreateReviewReducer
 })
 const initalState = {
   cart: { cartItems: cartItemsFromStorge, shippingAddress, paymentMethod },

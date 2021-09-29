@@ -12,16 +12,24 @@ import {
   PRODUCT_CREATE_FAIL,
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_SUCCESS,
-  PRODUCT_UPDATE_REQUEST
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_CREATE_REVIEW_REQUEST,
+  PRODUCT_CREATE_REVIEW_SUCCESS,
+  PRODUCT_CREATE_REVIEW_FAIL
 } from '../types'
 import axios from 'axios'
 import { HandelError } from '../handelError'
 import { authConfig } from '../config'
 
-export const getProducts = () => async dispatch => {
+export const getProducts = (
+  keyword = '',
+  pageNumber = ''
+) => async dispatch => {
   dispatch({ type: PRODUCTS_REQUST })
   try {
-    const { data } = await axios.get('/api/products')
+    const { data } = await axios.get(
+      `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+    )
     dispatch({ type: PRODUCTS_LIST_SUCCESS, payload: data })
   } catch (error) {
     HandelError(dispatch, PRODUCTS_LIST_FAIL, error)
@@ -72,5 +80,22 @@ export const updateProduct = (id, product) => async (dispatch, getState) => {
     dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data })
   } catch (error) {
     HandelError(dispatch, PRODUCT_UPDATE_FAIL, error)
+  }
+}
+
+export const createReviewProduct = (id, review) => async (
+  dispatch,
+  getState
+) => {
+  dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST })
+  const {
+    user: { userInfo }
+  } = getState()
+  const config = authConfig(userInfo.token)
+  try {
+    await axios.post(`/api/products/${id}/reviews`, review, config)
+    dispatch({ type: PRODUCT_CREATE_REVIEW_SUCCESS })
+  } catch (error) {
+    HandelError(dispatch, PRODUCT_CREATE_REVIEW_FAIL, error)
   }
 }

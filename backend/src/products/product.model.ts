@@ -23,11 +23,11 @@ export class Product extends Typegoose {
   @prop({ required: true, default: 0 })
   countInStock?: number
   @prop({ default: [] })
-  reviews?: [Review]
+  reviews?: Review[]
   @prop({ required: true, default: Date.now() })
   createdAt?: Date
   @prop({ required: true, default: Date.now() })
-  updaredAt?: Date
+  updatedAt?: Date
 }
 const productModel = new Product().getModelForClass(Product)
 export default productModel

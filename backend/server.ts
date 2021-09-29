@@ -8,10 +8,13 @@ import userRoute from './src/users/user.route'
 import { errorHandler, notFound } from './middlewere/handleError'
 import orderRoute from './src/order/order.route'
 import uploadRoute from './middlewere/upload'
-
+import morgan from 'morgan'
 dotenv.config()
 connectDb()
 const app = express()
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
 app.use(cors())
 app.use(express.json())
 app.use('/api/products', productRoute)

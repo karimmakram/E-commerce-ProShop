@@ -37,4 +37,11 @@ productRoute.patch(
   asyncHandler(Admin),
   asyncHandler(productCn.updateProduct)
 )
+
+productRoute.post(
+  '/:id/reviews',
+  asyncHandler(Auth),
+  asyncHandler(productCn.addReview)
+)
+productRoute.get('/top', asyncHandler(productCn.getTopProduct))
 export default productRoute
