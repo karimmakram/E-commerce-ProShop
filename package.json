@@ -10,6 +10,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "nodemon ./backend/seeder.ts",
     "data:destroy": "nodemon ./backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix  frontend",
     "bulid": "tsc -p ."
   },
   "keywords": [],
