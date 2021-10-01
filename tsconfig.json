@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./compileTs",
+    "rootDir": "./backend",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

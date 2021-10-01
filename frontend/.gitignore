@@ -2,9 +2,6 @@
 
 # dependencies
 /node_modules
-node_modules
-/backend/data
-/backend/seeder.ts
 /.pnp
 .pnp.js
 
@@ -12,10 +9,9 @@ node_modules
 /coverage
 
 # production
-/forntend/build
+/build
 
 # misc
-.env
 .DS_Store
 .env.local
 .env.development.local
